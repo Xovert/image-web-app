@@ -1,0 +1,23 @@
+1. Login Page
+	- Email & Password
+	- Rate Limit
+	- Secure SQL Handling
+	- CSRF
+	- Routing exclusive for guest session
+2. Register Page
+	- Secure Register
+	- Validations
+	- Username & Password Credentials
+	- Storing by Hash and random USERID
+	- Unique Username
+3. User Page: By default Gallery Page
+	- Sidebar for Logout functionality
+	- Sidebar for change username
+4. Upload Page
+	- Choose Image to Upload
+	- Image processing
+	- Image checking 
+5. Gallery Page
+	- List all images in tiling format
+	- Delete button
+6. 
