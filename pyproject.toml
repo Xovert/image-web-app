@@ -1,0 +1,15 @@
+[project]
+name = "imgwebapp"
+version = "1.0.0"
+description = "Simple Image Upload Web App"
+dependencies = [
+    "flask",
+    "flask-bcrypt",
+    "flask-reuploaded",
+    "flask-wtf",
+]
+requires-python = ">=3.8"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
