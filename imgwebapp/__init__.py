@@ -5,6 +5,7 @@ def create_app(test_config=None):
     # create and config the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
+        SECRET_KEY='devtesthings',
         DATABASE=os.path.join(app.instance_path, 'imgwebapp.sqlite'),
         UPLOADED_PHOTOS_DEST='uploads',
         MAX_CONTENT_LENGTH = 1024 * 1024
