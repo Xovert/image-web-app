@@ -7,14 +7,14 @@ Gallery
 {% block header %}
   <!-- CSS -->
   <link rel="stylesheet" href="{{ url_for('static',filename='css/gallery.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-B4dCuUNnVv5+8EN6x/Z7vOtf6w9wKByFd56M6Bqj3wVJXLYooslpz2GYUiBy9vFj" crossorigin="anonymous">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet">
-  
+
+
   <!-- JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
   <script src="{{ url_for('static', filename='js/gallery.js') }}" defer></script>
+
 {% endblock %}
 
 {% block content %}
@@ -39,9 +39,10 @@ Gallery
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                  <form action="/upload" method="POST" enctype="multipart/form-data">
-                      {{ form.hidden_tag() }}
+                  <form action="{{ url_for('image.upload_image') }}" style="display:block;" method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
                       <div id="wrapper" class="form-group">
+                        <i class="fa-regular fa-image fa-2xl"></i>
                         {{ form.photo(class="form-control") }}
                       </div>
                       <div class="form-group d-flex justify-content-end my-3">
@@ -85,13 +86,12 @@ Gallery
                       {% endif %}
                   </li>
               </ul>
-              <form class="d-flex column-gap-2" role="search">
+              <form class="d-flex column-gap-2">
                   <!-- Button trigger modal -->
                   <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#uploadModal">
                       Upload
                   </button>
-
-                  <button formaction="/logout" class="btn btn-outline-danger" type="submit">Logout</button>
+                  <button formaction="{{ url_for('auth.logout') }}" class="btn btn-outline-danger" type="submit">Logout</button>
               </form>
           </div>
       </div>
@@ -101,21 +101,51 @@ Gallery
 
   <div class="mt-5 container">
       <div class="row">
-        
-          {% for data in datas%}
-            <div class="col-lg-4 mb-4 mb-lg-0">
-                <div class="bg-image hover-overlay ripple shadow-1-strong rounded mb-4" data-mdb-ripple-color="light"
-                    style="max-width: 22rem;">
-                    <img src="{{ data['img_path'] }}" class="w-100" />
-                        <div class="mask text-light d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
-                            <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
-                            <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
-                                <button class="btn btn-danger" type="submit" value="Yes" onclick="return confirm('Are you sure?');">Delete?</button>
-                            </form>
+          <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+                {% for data in datas%}
+                    {% if loop.index % 3 == 1 %}
+                        <div class="bg-image ripple hover-overlay shadow-1-strong rounded mb-4" style="display: block;" data-mdb-ripple-color="light">
+                            <img src="{{ data['img_path'] }}" class="w-100" />
+                            <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
+                                <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
+                                <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
+                                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
+                                </form>
+                            </div>
                         </div>
-                </div>
+                    {% endif %}
+                {% endfor %}
             </div>
-          {% endfor %}
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                {% for data in datas %}
+                    {% if loop.index % 3 == 2 %}
+                        <div class="bg-image ripple hover-overlay shadow-1-strong rounded mb-4" style="display: block;" data-mdb-ripple-color="light">
+                                <img src="{{ data['img_path'] }}" class="w-100" />
+                                <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
+                                    <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
+                                    <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
+                                        <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
+                                    </form>
+                                </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                {% for data in datas %}
+                    {% if loop.index is divisibleby 3 %}
+                        <div class="bg-image ripple hover-overlay shadow-1-strong rounded mb-4" style="display: block;" data-mdb-ripple-color="light">
+                            <img src="{{ data['img_path'] }}" class="w-100" />
+                            <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
+                                <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
+                                <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
+                                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         
           {% if not datas %}
             <div>It's Empty, Upload your First File!</div>
