@@ -61,18 +61,18 @@ Gallery
                   <svg class="mt-3" xmlns="http://www.w3.org/2000/svg" height="50" width="50" viewBox="0 0 512 512"><path fill="#FFD43B" d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" /></svg>
                   <p class="mt-3">You're going to delete this image. Are you sure?</p>
               </div>
-              <div class="modal-footer d-flex justify-content-center">
+              <form class="modal-footer d-flex justify-content-center" method="POST">
                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No, Keep It.</button>
-                  <button type="button" class="btn btn-danger">Yes, Delete!</button>
-              </div>
+                  <button type="submit" class="btn btn-danger btn-confirm">Yes, Delete!</button>
+              </form>
           </div>
       </div>
   </div>
 
   <!-- Navbar -->
-  <nav class="sticky-top navbar navbar-expand-lg bg-secondary-subtle">
+  <nav class="sticky-top navbar navbar-expand-lg" style="background-color: var(--bs-purple);">
       <div class="container-fluid mx-5">
-          <a class="navbar-brand" href="#">Project</a>
+          <a class="navbar-brand text-white" href="#">Project</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
           </button>
@@ -80,9 +80,9 @@ Gallery
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
                       {% if g.user %}
-                        <span class="navbar-text" aria-disabled="true">Hello, {{ g.user['username'] }}</span>
+                        <span class="navbar-text text-white-50" aria-disabled="true">Hello, {{ g.user['username'] }}</span>
                       {% else %}
-                        <span class="navbar-text" aria-disabled="true">Hello, who are you??</span>
+                        <span class="navbar-text text-white-50" aria-disabled="true">Hello, who are you??</span>
                       {% endif %}
                   </li>
               </ul>
@@ -91,7 +91,7 @@ Gallery
                   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
                       Upload
                   </button>
-                  <button formaction="{{ url_for('auth.logout') }}" class="btn btn-outline-danger" type="submit">Logout</button>
+                  <button formaction="{{ url_for('auth.logout') }}" class="btn btn-outline-danger text-warning" type="submit">Logout</button>
               </form>
           </div>
       </div>
@@ -108,9 +108,9 @@ Gallery
                             <img src="{{ data['img_path'] }}" class="w-100" />
                             <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
                                 <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
-                                <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
-                                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
-                                </form>
+                                <div>
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#Deletion" data-record-path="{{ url_for('image.delete', id=data['id']) }}">Delete</button>
+                                </div>
                             </div>
                         </div>
                     {% endif %}
@@ -123,10 +123,9 @@ Gallery
                             <img src="{{ data['img_path'] }}" class="w-100" />
                             <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
                                 <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
-                                <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
-                                    <input type="hidden" name="id" value="data['id']">
-                                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
-                                </form>
+                                <div>
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#Deletion" data-record-path="{{ url_for('image.delete', id=data['id']) }}">Delete</button>
+                                </div>
                             </div>
                         </div>
                     {% endif %}
@@ -139,9 +138,9 @@ Gallery
                             <img src="{{ data['img_path'] }}" class="w-100" />
                             <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
                                 <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
-                                <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
-                                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
-                                </form>
+                                <div>
+                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#Deletion" data-record-path="{{ url_for('image.delete', id=data['id']) }}">Delete</button>
+                                </div>
                             </div>
                         </div>
                     {% endif %}
