@@ -65,6 +65,8 @@ def login():
             error = 'Your username or password is incorrect.'
         elif not bcrypt.check_password_hash(user['password'], password):
             error = 'Your username or password is incorrect.'
+        elif g.user is not None:
+            error = "You already logged in!"
 
         if error is None:
             session.clear()
@@ -85,6 +87,11 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (uid,)
         ).fetchone()
+
+@bp.after_app_request
+def after_request(response):
+    response.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return response
 
 @bp.route('/logout')
 def logout():

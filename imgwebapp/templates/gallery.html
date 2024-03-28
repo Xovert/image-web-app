@@ -53,7 +53,7 @@ Gallery
           </div>
       </div>
   </div>
-<!-- 
+
   <div class="modal fade" id="Deletion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="DeletionLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -67,10 +67,10 @@ Gallery
               </div>
           </div>
       </div>
-  </div> -->
+  </div>
 
   <!-- Navbar -->
-  <nav class="sticky-top navbar navbar-expand-lg bg-primary-subtle">
+  <nav class="sticky-top navbar navbar-expand-lg bg-secondary-subtle">
       <div class="container-fluid mx-5">
           <a class="navbar-brand" href="#">Project</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,15 +80,15 @@ Gallery
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
                       {% if g.user %}
-                        <a class="nav-link disabled" aria-disabled="true">Hello, {{ g.user['username'] }}</a>
+                        <span class="navbar-text" aria-disabled="true">Hello, {{ g.user['username'] }}</span>
                       {% else %}
-                        <a class="nav-link disabled" aria-disabled="true">Hello, who are you??</a>
+                        <span class="navbar-text" aria-disabled="true">Hello, who are you??</span>
                       {% endif %}
                   </li>
               </ul>
               <form class="d-flex column-gap-2">
                   <!-- Button trigger modal -->
-                  <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
                       Upload
                   </button>
                   <button formaction="{{ url_for('auth.logout') }}" class="btn btn-outline-danger" type="submit">Logout</button>
@@ -120,13 +120,14 @@ Gallery
                 {% for data in datas %}
                     {% if loop.index % 3 == 2 %}
                         <div class="bg-image ripple hover-overlay shadow-1-strong rounded mb-4" style="display: block;" data-mdb-ripple-color="light">
-                                <img src="{{ data['img_path'] }}" class="w-100" />
-                                <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
-                                    <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
-                                    <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
-                                        <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
-                                    </form>
-                                </div>
+                            <img src="{{ data['img_path'] }}" class="w-100" />
+                            <div class="mask d-flex justify-content-center flex-column text-center" style="background-color: rgba(0, 0, 0, 0.5); ">
+                                <h4><i class="fa-solid fa-trash-can" style="color: red;"></i></h4>
+                                <form action="{{ url_for('image.delete', id=data['id']) }}" method="POST">
+                                    <input type="hidden" name="id" value="data['id']">
+                                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure?');">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -147,10 +148,12 @@ Gallery
                 {% endfor %}
             </div>
         
-          {% if not datas %}
-            <div>It's Empty, Upload your First File!</div>
-          {% endif %}
-      </div>
+        </div>
+        {% if not datas %}
+            <div class="alert alert-primary" role="alert">
+                It's Empty, upload your first file!
+            </div>
+        {% endif %}
   </div>
   <!-- Gallery -->
 </body>
