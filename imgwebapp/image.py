@@ -42,7 +42,7 @@ def gallery():
     form = UploadFileForm()
     return render_template('gallery.html', form=form, datas=datas)
 
-@bp.route('/<filename>', methods=('GET',))
+@bp.route('/uploads/<filename>', methods=('GET',))
 def get_file(filename):
     return send_from_directory(os.path.join(current_app.instance_path,current_app.config['UPLOADED_PHOTOS_DEST'],g.user['username']), filename)
 
