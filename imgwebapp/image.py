@@ -43,9 +43,9 @@ def gallery():
     return render_template('gallery.html', form=form, datas=datas)
 
 @bp.route('/uploads/<filename>', methods=('GET',))
+@login_required
 def get_file(filename):
     return send_from_directory(os.path.join(current_app.instance_path,current_app.config['UPLOADED_PHOTOS_DEST'],g.user['username']), filename)
-
 
 @bp.route('/upload', methods=('POST',))
 @login_required
@@ -105,5 +105,13 @@ def delete(id):
 
 @bp.errorhandler(413)
 def request_entity_too_large(error):
-    flash('File Cannot Exceed 1 MB!')
+    max_size = current_app.config['MAX_CONTENT_LENGTH']
+    flash(f'File Cannot Exceed {sizeof_fmt(max_size)}')
     return redirect(url_for('gallery'))
+
+def sizeof_fmt(num, suffix="B"):
+    for unit in ("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"):
+        if abs(num) < 1024.0:
+            return f"{num:3.1f} {unit}{suffix}"
+        num /= 1024.0
+    return f"{num:.1f} Yi{suffix}"
