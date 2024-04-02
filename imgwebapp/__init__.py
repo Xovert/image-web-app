@@ -19,8 +19,12 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     try:
-        os.makedirs(app.instance_path, exist_ok=True)
-        os.makedirs(os.path.join(app.instance_path, app.config['UPLOADED_PHOTOS_DEST']), exist_ok=True)
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+    
+    try:
+        os.makedirs(os.path.join(app.instance_path, app.config['UPLOADED_PHOTOS_DEST']))
     except OSError:
         pass
     

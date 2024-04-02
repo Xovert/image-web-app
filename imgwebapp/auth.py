@@ -48,7 +48,8 @@ def register():
 
         flash(error)
 
-    return render_template('index.html')
+    return redirect(url_for('index'))
+
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -61,12 +62,12 @@ def login():
             'SELECT * FROM user WHERE username = ?', (username,)
         ).fetchone()
 
-        if user is None:
+        if g.user is not None:
+            error = "You already logged in!"
+        elif user is None:
             error = 'Your username or password is incorrect.'
         elif not bcrypt.check_password_hash(user['password'], password):
             error = 'Your username or password is incorrect.'
-        elif g.user is not None:
-            error = "You already logged in!"
 
         if error is None:
             session.clear()
@@ -75,7 +76,7 @@ def login():
 
         flash(error)
 
-    return render_template('index.html')
+    return redirect(url_for('index'))
 
 @bp.before_app_request
 def load_logged_in_user():
