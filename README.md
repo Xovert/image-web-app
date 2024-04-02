@@ -1,11 +1,12 @@
 # Image Web App
 
-A Simple Web App for Uploading Images
-The design is very human.
+A Simple Web App for Uploading Images.  
+> ***The design is very human***
 
 ## Dependencies
 
 This app requires python>=3.8 to run. If you don't have python, install it first.
+Other dependencies are listed in requirements.txt
 
 ## How-to-run
 
