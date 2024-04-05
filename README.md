@@ -12,37 +12,37 @@ Other dependencies are listed in requirements.txt
 
 1. Clone this repository and switch directory to the cloned repo
 ```console
-$ git clone https://github.com/Xovert/image-web-app.git
-$ cd image-web-app
+git clone https://github.com/Xovert/image-web-app.git
+cd image-web-app
 ```
 
 2. In your terminal, enter the following commands
 
 Linux:
 ```console
-$ python3 -m venv .venv
-$ . .venv/bin/activate
+python3 -m venv .venv
+. .venv/bin/activate
 ```
 Windows:
 ```console
-$ py -3 -m venv .venv
-$ .venv\Scripts\activate
+py -3 -m venv .venv
+.venv\Scripts\activate
 ```
 > ***You should now be running in a python virtual environment***
 
 3. Install the needed dependencies
 ```console
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 5. Setup Database
 ```console
-$ flask init-db
+flask init-db
 ```
 
 6. Run the App
 ```console
-$ flask run 
+flask run 
 ```
 
 ## Run Unit Test
