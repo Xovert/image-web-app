@@ -1,9 +1,10 @@
 import os
 from flask import Flask
+from flask_wtf import CSRFProtect
 
-def create_app(test_config=None):
+def create_app(test_config=None, instance_path=None):
     # create and config the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, instance_path=instance_path)
     app.config.from_mapping(
         SECRET_KEY='devtesthings',
         DATABASE=os.path.join(app.instance_path, 'imgwebapp.sqlite'),
@@ -27,6 +28,8 @@ def create_app(test_config=None):
         os.makedirs(os.path.join(app.instance_path, app.config['UPLOADED_PHOTOS_DEST']))
     except OSError:
         pass
+
+    csrf = CSRFProtect(app)
     
     from . import db
     db.init_app(app)

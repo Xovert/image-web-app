@@ -21,7 +21,7 @@
         <div class="tab-content" id="tabsLmao">
             <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login" tabindex="0">
                 <form action="{{ url_for('auth.login') }}" method="POST">
-
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <!-- Username input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="loginName">Username</label>
@@ -49,7 +49,7 @@
             </div>
             <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register" tabindex="0">
                 <form action="{{ url_for('auth.register') }}" method="POST">
-
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <!-- Username input -->
                     <div class="form-outline mb-4 mt-3">
                         <label class="form-label" for="registerUsername">Username</label>

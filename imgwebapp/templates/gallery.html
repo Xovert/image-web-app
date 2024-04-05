@@ -40,7 +40,7 @@ Gallery
               </div>
               <div class="modal-body">
                   <form action="{{ url_for('image.upload_image') }}" style="display:block;" method="POST" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
+                        {{ form.csrf_token }}
                       <div id="wrapper" class="form-group">
                         <i class="fa-regular fa-image fa-2xl"></i>
                         {{ form.photo(class="form-control") }}
@@ -62,6 +62,7 @@ Gallery
                   <p class="mt-3">You're going to delete this image. Are you sure?</p>
               </div>
               <form class="modal-footer d-flex justify-content-center" method="POST">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No, Keep It.</button>
                   <button type="submit" class="btn btn-danger btn-confirm">Yes, Delete!</button>
               </form>

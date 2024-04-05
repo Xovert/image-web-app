@@ -20,7 +20,7 @@ def init_uploads(app):
 class UploadFileForm(FlaskForm):
     photo = FileField(validators=[
         FileAllowed(photos, 'Only images are allowed!'),
-        FileRequired('File field should not be empty!')
+        FileRequired('File upload must not be empty!')
     ])
     submit = SubmitField("Upload")
 
@@ -29,16 +29,13 @@ class UploadFileForm(FlaskForm):
 @login_required
 def gallery():
     db = get_db()
-    try:
-        datas = db.execute(
-            'SELECT img.id, img_path, user.username'
-            ' FROM images img JOIN user ON img.user_id = user.id'
-            ' WHERE img.user_id = ?'
-            ' ORDER BY img.id DESC',
-            (g.user['id'],)
-        ).fetchall()
-    except db.IntegrityError:
-        error = 'Failed'
+    datas = db.execute(
+        'SELECT img.id, img_path, user.username'
+        ' FROM images img JOIN user ON img.user_id = user.id'
+        ' WHERE img.user_id = ?'
+        ' ORDER BY img.id DESC',
+        (g.user['id'],)
+    ).fetchall()
     form = UploadFileForm()
     return render_template('gallery.html', form=form, datas=datas)
 
@@ -54,7 +51,7 @@ def upload_image():
     error = None
 
     if not form.validate_on_submit():
-        error = form.photo.errors
+        error = form.photo.errors[0]
     
     if error is None:
         photo = form.photo.data
@@ -75,32 +72,35 @@ def upload_image():
         except db.IntegrityError:
             error = 'File already exists!'
         else:
+            flash('Image upload successful!')
             return redirect(url_for('gallery'))
 
     flash(error)
     return redirect(url_for('gallery'))
 
-def get_image(id):
+def get_image(id, user_id):
     data = get_db().execute(
         'SELECT img.id, img_path, img_name, img.user_id'
         ' FROM images img JOIN user ON img.user_id = user.id'
-        ' WHERE img.id = ?',
-        (id,)
+        ' WHERE img.id = ? AND user.id = ?',
+        (id,user_id)
     ).fetchone()
             
     if data is None:
-        abort(404, f"Image doesn't exist.")
+        abort(404, f"Data not found.")
     
     return data['img_name']
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+
+@bp.route('/delete/<int:id>', methods=('POST',))
 @login_required
 def delete(id):
-    filename = get_image(id)
+    filename = get_image(id, g.user['id'])
     db = get_db()
     db.execute('DELETE FROM images WHERE id = ?', (id,))
     db.commit()
     os.remove(os.path.join(current_app.instance_path, current_app.config['UPLOADED_PHOTOS_DEST'], g.user['username'], filename))
+    flash('Image successfully deleted!')
     return redirect(url_for('gallery'))
 
 @bp.errorhandler(413)
@@ -109,7 +109,8 @@ def request_entity_too_large(error):
     flash(f'File Cannot Exceed {sizeof_fmt(max_size)}')
     return redirect(url_for('gallery'))
 
-def sizeof_fmt(num, suffix="B"):
+# SIZE CONVERSION, NEED NOT BE TESTED
+def sizeof_fmt(num, suffix="B"): # pragma: no cover
     for unit in ("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"):
         if abs(num) < 1024.0:
             return f"{num:3.1f} {unit}{suffix}"
